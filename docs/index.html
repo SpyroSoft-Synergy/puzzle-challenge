@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <!--Set visual viewport size for mobile devices to the device size,
+        witch results in a scale of 1 and a 1:1 mapping between CSS pixels
+        and Qt device independent pixels. -->
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=0"/>
+
+    <title>Qt for WebAssembly: Puzzle Challenge</title>
+    <style>
+      /* Make the html body cover the entire (visual) viewport with no scroll bars. */
+      html, body { padding: 0; margin: 0; overflow: hidden; height: 100% }
+      #screen { width: 100%; height: 100%; }
+    </style>
+  </head>
+  <body onload="init()" style="background: #09102B;">
+    <div style="position: absolute;
+    width: 1366px;
+    height: 1024px;  
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);  
+    background: radial-gradient(50% 50% at 50% 50%, #10205B 0%, rgba(16, 32, 91, 0) 100%);"/>
+
+    <figure style="overflow:visible;z-index: 15; position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);" id="qtspinner">
+      <center style="line-height:150%;" >
+        <img src="qt_logo.png" width="60" height="45" style="display:block"></img>
+        <div style="
+        font-style: normal;
+        font-weight: 300;
+        font-size: 15px;
+        line-height: 33px;
+        text-align: center;
+        
+        /* Primary/White */
+        
+        color: #FFFFFF;">Qt for WebAssembly</div>
+        <strong style=";
+        font-style: normal;
+        font-weight: 300;
+        font-size: 30px;
+        line-height: 33px;
+        text-align: center;
+        
+        /* Primary/White */
+        
+        color: #FFFFFF;">Puzzle Challenge</strong>
+        <div id="qtstatus" style="
+        font-style: normal;
+        font-weight: 300;
+        font-size: 10px;
+        line-height: 33px;
+        text-align: center;
+        
+        /* Primary/White */
+        
+        color: #FFFFFF;"></div>
+        <noscript>JavaScript is disabled. Please enable JavaScript to use this application.</noscript>
+        <img src="spyro_logo.png" width="150" height="46" style="display:block"></img>
+      </center>
+    </figure>
+    </div>
+    
+  </div>
+    <div id="screen"></div>
+
+    <script type='text/javascript'>
+        let qtLoader = undefined;
+        function init() {
+          var spinner = document.querySelector('#qtspinner');
+          var canvas = document.querySelector('#screen');
+          var status = document.querySelector('#qtstatus')
+
+          qtLoader = new QtLoader({
+              canvasElements : [canvas],
+              showLoader: function(loaderStatus) {
+                  spinner.style.display = 'block';
+                  canvas.style.display = 'none';
+                  status.innerHTML = loaderStatus + "...";
+              },
+              showError: function(errorText) {
+                  status.innerHTML = errorText;
+                  spinner.style.display = 'block';
+                  canvas.style.display = 'none';
+              },
+              showExit: function() {
+                  status.innerHTML = "Application exit";
+                  if (qtLoader.exitCode !== undefined)
+                      status.innerHTML += " with code " + qtLoader.exitCode;
+                  if (qtLoader.exitText !== undefined)
+                      status.innerHTML += " (" + qtLoader.exitText + ")";
+                  spinner.style.display = 'block';
+                  canvas.style.display = 'none';
+              },
+              showCanvas: function() {
+                  spinner.style.display = 'none';
+                  canvas.style.display = 'block';
+              },
+          });
+          qtLoader.loadEmscriptenModule("apppuzzle_challenge");
+      }
+    </script>
+    <script type="text/javascript" src="qtloader.js"></script>
+  </body>
+</html>
